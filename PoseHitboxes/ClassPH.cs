@@ -1,6 +1,7 @@
 ﻿using Il2CppRUMBLE.Tutorial.MoveLearning;
 using MelonLoader;
 using RumbleModdingAPI;
+using RumbleModdingAPI.RMAPI;
 using System.Collections;
 
 //using static RumbleModdingAPI.Calls;
@@ -110,10 +111,10 @@ namespace PoseHitboxes
                         try
                         {
                             //MelonLogger.Msg("loading items");
-                            
-                            poseGhost = Calls.GameObjects.Gym.LOGIC.Heinhouserproducts.MoveLearning.GetGameObject().GetComponentInChildren<PoseGhost>();//<PoseGhost>();//GameObject.Find("--------------LOGIC--------------/Heinhouser products/MoveLearning/Ghost").GetComponent<PoseGhost>();
-                            ghosty = poseGhost.bodyRenderer.transform.parent.GetChild(1).GetComponent<Renderer>().material;
-                            redy = Calls.GameObjects.Gym.SCENE.GymProduction.Mainstaticgroup.Gymarena.GetGameObject().transform.GetChild(0).GetComponent<Renderer>().material;
+                            poseGhost = GameObjects.Gym.INTERACTABLES.PoseGhost.Ghost.GetGameObject().GetComponentInChildren<PoseGhost>();//<PoseGhost>();//GameObject.Find("--------------LOGIC--------------/Heinhouser products/MoveLearning/Ghost").GetComponent<PoseGhost>();
+                            ghosty = poseGhost.ActiveInstance.BodyRenderer.transform.parent.GetChild(2).GetComponent<Renderer>().material;
+                            //redy = Calls.GameObjects.Gym.SCENE.GymProduction.Mainstaticgroup.Gymarena.GetGameObject().transform.GetChild(0).GetComponent<Renderer>().material;
+                            redy = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
                             ////HBRef = GameObject.Find("Player Controller(Clone)/Visuals/RIG");///Bone_Shoulderblade_L/Bone_Shoulder_L/Bone_Lowerarm_L/Bone_Hand_L");
                             ////HBRefHead = GameObject.Find("Player Controller(Clone)/Visuals/RIG/Bone_Pelvis/Bone_Spine/Bone_Chest/Bone_Neck/Bone_Head");
                             LHandRef = GameObject.Find("Player Controller(Clone)/Visuals/Skelington/Bone_Pelvis/Bone_Spine_A/Bone_Chest/Bone_Shoulderblade_L/Bone_Shoulder_L/Bone_Lowerarm_L/Bone_HandAlpha_L");
@@ -138,16 +139,16 @@ namespace PoseHitboxes
                     if (currentPoseName != poseGhost.CurrentPoseSet.configurations[poseGhost.currentVisualPoseIndex].Pose.name)
                     {
                         //MelonLogger.Msg("chkpt 2");
-                        if (poseGhost.bodyRenderer.transform.parent.GetChild(0).childCount > 0)
+                        if (poseGhost.ActiveInstance.BodyRenderer.transform.parent.GetChild(0).childCount > 0)
                         {
                             //MelonLogger.Msg("chkpt 3");
                             // MelonLogger.Msg("Destroying Existing");
-                            while (poseGhost.bodyRenderer.transform.parent.GetChild(0).childCount > 0 || poseGhost.bodyRenderer.transform.parent.GetChild(1).childCount > 0)
+                            while (poseGhost.ActiveInstance.BodyRenderer.transform.parent.GetChild(0).childCount > 0 || poseGhost.ActiveInstance.BodyRenderer.transform.parent.GetChild(1).childCount > 0)
                             {
                                 try
                                 {
-                                    GameObject.DestroyImmediate(poseGhost.bodyRenderer.transform.parent.GetChild(0).GetChild(0).gameObject);
-                                    GameObject.DestroyImmediate(poseGhost.bodyRenderer.transform.parent.GetChild(1).GetChild(0).gameObject);
+                                    GameObject.DestroyImmediate(poseGhost.ActiveInstance.BodyRenderer.transform.parent.GetChild(0).GetChild(0).gameObject);
+                                    GameObject.DestroyImmediate(poseGhost.ActiveInstance.BodyRenderer.transform.parent.GetChild(1).GetChild(0).gameObject);
                                     GameObject.DestroyImmediate(LRotate.gameObject);
                                     GameObject.DestroyImmediate(RRotate.gameObject);
                                     //MelonLogger.Msg("objects destroyed");
@@ -201,11 +202,11 @@ namespace PoseHitboxes
             GameObject LCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             GameObject RCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             //MelonLogger.Msg("cubes start1");
-            LCube.transform.parent = poseGhost.bodyRenderer.transform.parent.GetChild(0);
-            RCube.transform.parent = poseGhost.bodyRenderer.transform.parent.GetChild(1);
+            LCube.transform.parent = poseGhost.ActiveInstance.BodyRenderer.transform.parent.GetChild(0);
+            RCube.transform.parent = poseGhost.ActiveInstance.BodyRenderer.transform.parent.GetChild(1);
             //MelonLogger.Msg("cubes start2");
-            LCube.transform.position = poseGhost.leftHand.position;//showCurrentPoseData.leftControllerCondition.DesiredPose.position;
-            RCube.transform.position = poseGhost.rightHand.position;
+            LCube.transform.position = poseGhost.ActiveInstance.LeftHand.position;//showCurrentPoseData.leftControllerCondition.DesiredPose.position;
+            RCube.transform.position = poseGhost.ActiveInstance.RightHand.position;
             //MelonLogger.Msg("cubes made");
 
             BuildWireframeBox(LCube.gameObject, redy, black8);
@@ -220,8 +221,8 @@ namespace PoseHitboxes
 
             LCube.GetComponent<Renderer>().enabled = false;
             RCube.GetComponent<Renderer>().enabled = false;
-            poseGhost.bodyRenderer.transform.parent.GetChild(0).GetComponent<Renderer>().material = redy;
-            poseGhost.bodyRenderer.transform.parent.GetChild(1).GetComponent<Renderer>().material = redy;
+            //poseGhost.ActiveInstance.BodyRenderer.transform.parent.GetChild(0).GetComponent<Renderer>().material = redy;
+            //poseGhost.ActiveInstance.BodyRenderer.transform.parent.GetChild(1).GetComponent<Renderer>().material = redy;
 
 
             //setup gyro objects and details
@@ -232,8 +233,8 @@ namespace PoseHitboxes
             GameObject RYBar = GameObject.CreatePrimitive(PrimitiveType.Cube);
             GameObject RZBar = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
-            LRotate.transform.parent = poseGhost.bodyRenderer.transform.parent.GetChild(0);
-            RRotate.transform.parent = poseGhost.bodyRenderer.transform.parent.GetChild(1);
+            LRotate.transform.parent = poseGhost.ActiveInstance.BodyRenderer.transform.parent.GetChild(0);
+            RRotate.transform.parent = poseGhost.ActiveInstance.BodyRenderer.transform.parent.GetChild(1);
 
             LRotate.GetComponent<Renderer>().material = redy;
             RRotate.GetComponent<Renderer>().material = redy;
@@ -260,8 +261,8 @@ namespace PoseHitboxes
             RYBar.GetComponent<Renderer>().material.color = green8;
             RZBar.GetComponent<Renderer>().material.color = blue8;
 
-            LRotate.transform.position = poseGhost.leftHand.position + new Vector3(-1.0f, 0.00f, -1.0f);
-            RRotate.transform.position = poseGhost.rightHand.position + new Vector3(-1.0f, 0.00f, -1.0f);
+            LRotate.transform.position = poseGhost.ActiveInstance.LeftHand.position + new Vector3(-1.0f, 0.00f, -1.0f);
+            RRotate.transform.position = poseGhost.ActiveInstance.RightHand.position + new Vector3(-1.0f, 0.00f, -1.0f);
             //MelonLogger.Msg("gyros made");
             //generate reference cylinders
 
@@ -275,7 +276,7 @@ namespace PoseHitboxes
             //calculate trig for degree limits
 
 
-            if (poseGhost.leftHand.rotation.eulerAngles.x == poseGhost.CurrentPoseSet.configurations[poseGhost.currentVisualPoseIndex].Pose.leftControllerCondition.DesiredPose.rotation.eulerAngles.x) // if the hands are not mirrored, use the normal map
+            if (poseGhost.ActiveInstance.LeftHand.rotation.eulerAngles.x == poseGhost.CurrentPoseSet.configurations[poseGhost.currentVisualPoseIndex].Pose.leftControllerCondition.DesiredPose.rotation.eulerAngles.x) // if the hands are not mirrored, use the normal map
             {
                 LThresh = poseGhost.CurrentPoseSet.configurations[poseGhost.currentVisualPoseIndex].Pose.LeftControllerCondition.RotationTreshold;
                 RThresh = poseGhost.CurrentPoseSet.configurations[poseGhost.currentVisualPoseIndex].Pose.RightControllerCondition.RotationTreshold;
@@ -297,8 +298,8 @@ namespace PoseHitboxes
             float LRotationLimit = ((1 - LThresh) * 3.14159f);
             float RRotationLimit = ((1 - RThresh) * 3.14159f);
 
-            LRotateLimit.transform.parent = poseGhost.bodyRenderer.transform.parent.GetChild(0);
-            RRotateLimit.transform.parent = poseGhost.bodyRenderer.transform.parent.GetChild(1);
+            LRotateLimit.transform.parent = poseGhost.ActiveInstance.BodyRenderer.transform.parent.GetChild(0);
+            RRotateLimit.transform.parent = poseGhost.ActiveInstance.BodyRenderer.transform.parent.GetChild(1);
 
             LRotateLimit.GetComponent<Renderer>().material = redy;
             RRotateLimit.GetComponent<Renderer>().material = redy;
@@ -330,11 +331,11 @@ namespace PoseHitboxes
             RYBarLimit.GetComponent<Renderer>().material.color = green1;
             RZBarLimit.GetComponent<Renderer>().material.color = blue1;
 
-            LRotateLimit.transform.position = poseGhost.leftHand.position + new Vector3(-0.3f, 0.15f, -0.3f);
-            RRotateLimit.transform.position = poseGhost.rightHand.position + new Vector3(-0.3f, 0.15f, -0.3f);
-            LRotate.transform.position = poseGhost.leftHand.position + new Vector3(-0.3f, 0.15f, -0.3f);
-            RRotate.transform.position = poseGhost.rightHand.position + new Vector3(-0.3f, 0.15f, -0.3f);
-            if (poseGhost.leftHand.rotation.eulerAngles.x == poseGhost.CurrentPoseSet.configurations[poseGhost.currentVisualPoseIndex].Pose.leftControllerCondition.DesiredPose.rotation.eulerAngles.x) // if the hands are not mirrored, use the normal map
+            LRotateLimit.transform.position = poseGhost.ActiveInstance.LeftHand.position + new Vector3(-0.3f, 0.15f, -0.3f);
+            RRotateLimit.transform.position = poseGhost.ActiveInstance.RightHand.position + new Vector3(-0.3f, 0.15f, -0.3f);
+            LRotate.transform.position = poseGhost.ActiveInstance.LeftHand.position + new Vector3(-0.3f, 0.15f, -0.3f);
+            RRotate.transform.position = poseGhost.ActiveInstance.RightHand.position + new Vector3(-0.3f, 0.15f, -0.3f);
+            if (poseGhost.ActiveInstance.LeftHand.rotation.eulerAngles.x == poseGhost.CurrentPoseSet.configurations[poseGhost.currentVisualPoseIndex].Pose.leftControllerCondition.DesiredPose.rotation.eulerAngles.x) // if the hands are not mirrored, use the normal map
             {
                 LCube.transform.localRotation = poseGhost.CurrentPoseSet.configurations[poseGhost.currentVisualPoseIndex].Pose.leftControllerCondition.DesiredPose.rotation;
                 RCube.transform.localRotation = poseGhost.CurrentPoseSet.configurations[poseGhost.currentVisualPoseIndex].Pose.rightControllerCondition.DesiredPose.rotation;

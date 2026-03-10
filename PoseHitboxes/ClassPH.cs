@@ -335,16 +335,18 @@ namespace PoseHitboxes
             RRotateLimit.transform.position = poseGhost.ActiveInstance.RightHand.position + new Vector3(-0.3f, 0.15f, -0.3f);
             LRotate.transform.position = poseGhost.ActiveInstance.LeftHand.position + new Vector3(-0.3f, 0.15f, -0.3f);
             RRotate.transform.position = poseGhost.ActiveInstance.RightHand.position + new Vector3(-0.3f, 0.15f, -0.3f);
-            if (poseGhost.ActiveInstance.LeftHand.rotation.eulerAngles.x == poseGhost.CurrentPoseSet.configurations[poseGhost.currentVisualPoseIndex].Pose.leftControllerCondition.DesiredPose.rotation.eulerAngles.x) // if the hands are not mirrored, use the normal map
-            {
+            //if (poseGhost.ActiveInstance.LeftHand.rotation.eulerAngles.x == poseGhost.CurrentPoseSet.configurations[poseGhost.currentVisualPoseIndex].Pose.leftControllerCondition.DesiredPose.rotation.eulerAngles.x) // if the hands are not mirrored, use the normal map
+           // {
                 LCube.transform.localRotation = poseGhost.CurrentPoseSet.configurations[poseGhost.currentVisualPoseIndex].Pose.leftControllerCondition.DesiredPose.rotation;
                 RCube.transform.localRotation = poseGhost.CurrentPoseSet.configurations[poseGhost.currentVisualPoseIndex].Pose.rightControllerCondition.DesiredPose.rotation;
-            }
-            else // they need to be swapped
-            {
-                RCube.transform.localRotation = poseGhost.CurrentPoseSet.configurations[poseGhost.currentVisualPoseIndex].Pose.leftControllerCondition.DesiredPose.rotation;
-                LCube.transform.localRotation = poseGhost.CurrentPoseSet.configurations[poseGhost.currentVisualPoseIndex].Pose.rightControllerCondition.DesiredPose.rotation;
-            }
+                //MelonLogger.Msg("left to left, right to right");
+          //  }
+          //  else // they need to be swapped
+          //  {
+          //      RCube.transform.localRotation = poseGhost.CurrentPoseSet.configurations[poseGhost.currentVisualPoseIndex].Pose.leftControllerCondition.DesiredPose.rotation;
+          //      LCube.transform.localRotation = poseGhost.CurrentPoseSet.configurations[poseGhost.currentVisualPoseIndex].Pose.rightControllerCondition.DesiredPose.rotation;
+          //      MelonLogger.Msg("swapped");
+          //  }
             LRotateLimit.transform.rotation = LCube.transform.rotation;
             RRotateLimit.transform.rotation = RCube.transform.rotation;
             //MelonLogger.Msg("gyros done");
